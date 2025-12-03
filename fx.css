@@ -1,0 +1,16 @@
+/* fx.css */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.number-glow {
+    animation: pulse 0.2s ease-in-out;
+    color: #fff; /* 강조 시 흰색으로 번쩍임 */
+}
+
+.active-btn {
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    transform: translateY(2px);
+}
