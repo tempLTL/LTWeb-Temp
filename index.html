@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDMS UTILS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-extend.css">
+    <link rel="stylesheet" href="fx.css">
+    <meta name="theme-color" content="#001100">
+</head>
+<body>
+    <canvas id="matrixBg" aria-hidden="true"></canvas>
+
+    <div class="hamburger" onclick="UI.toggleMenu()" aria-label="메뉴 열기">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    
+    <nav class="menu" id="menu">
+        <ul>
+            <li class="main-menu">메인메뉴</li>
+            <li onclick="UI.showTab('numberDraw')">숫자뽑기</li>
+            <li onclick="UI.showTab('stopwatch')">스탑워치</li>
+            <li onclick="UI.showTab('timer')">타이머</li>
+            <li onclick="UI.showTab('calculator')">계산기</li>
+            <li onclick="UI.showTab('converter')">단위 변환기</li>
+            <li class="update-log" onclick="UI.showUpdateLog()">Update Log</li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>HDMS UTILS</h1>
+        <h2>Version: Temp-1</h2>
+        <p class="credits">원본 웹을 호스팅하던 계정의 원인불명의 정지로 인해 급하게 일부만 복구되었습니다. 현재 많은 기능이 작동하지 않습니다.</p>
+    </div>
+    
+    <div class="content">
+        <!-- 숫자뽑기 탭 -->
+        <div id="numberDraw" class="tab active">
+            <h2>숫자뽑기</h2>
+            <div class="input-group">
+                <label>시작 숫자: <input type="number" id="startNum" value="1"></label>
+                <label>끝 숫자: <input type="number" id="endNum" value="100"></label>
+                <label>뽑을 숫자 수: <input type="number" id="countNum" value="5"></label>
+            </div>
+            <button onclick="NumberDraw.draw()" class="primary-btn">뽑기</button>
+            <div id="result" class="result-display"></div>
+        </div>
+        
+        <!-- 스탑워치 탭 -->
+        <div id="stopwatch" class="tab">
+            <h2>스탑워치</h2>
+            <div class="timer-display" id="stopwatchDisplay">00:00:00</div>
+            <div class="button-group">
+                <button id="startStopBtn" onclick="Stopwatch.toggle()" class="primary-btn">시작</button>
+                <button onclick="Stopwatch.reset()" class="secondary-btn">리셋</button>
+                <button onclick="Stopwatch.lap()" class="secondary-btn">랩타임</button>
+            </div>
+            <div id="lapTimes" class="lap-times"></div>
+        </div>
+        
+        <!-- 타이머 탭 -->
+        <div id="timer" class="tab">
+            <h2>타이머</h2>
+            <div class="input-group">
+                <label>분: <input type="number" id="timerMinutes" value="5" min="0" max="59"></label>
+                <label>초: <input type="number" id="timerSeconds" value="0" min="0" max="59"></label>
+            </div>
+            <div class="timer-display" id="timerDisplay">05:00</div>
+            <div class="button-group">
+                <button id="timerStartStopBtn" onclick="Timer.toggle()" class="primary-btn">시작</button>
+                <button onclick="Timer.reset()" class="secondary-btn">리셋</button>
+            </div>
+        </div>
+        
+        <!-- 계산기 탭 -->
+        <div id="calculator" class="tab">
+            <h2>계산기</h2>
+            <div class="calculator-container">
+                <input type="text" id="calcDisplay" readonly class="calc-display">
+                <div class="calc-buttons">
+                    <button onclick="Calculator.clear()" class="calc-btn operator">C</button>
+                    <button onclick="Calculator.clearEntry()" class="calc-btn operator">CE</button>
+                    <button onclick="Calculator.appendOperator('/')" class="calc-btn operator">÷</button>
+                    <button onclick="Calculator.appendOperator('*')" class="calc-btn operator">×</button>
+                    
+                    <button onclick="Calculator.appendNumber('7')" class="calc-btn">7</button>
+                    <button onclick="Calculator.appendNumber('8')" class="calc-btn">8</button>
+                    <button onclick="Calculator.appendNumber('9')" class="calc-btn">9</button>
+                    <button onclick="Calculator.appendOperator('-')" class="calc-btn operator">-</button>
+                    
+                    <button onclick="Calculator.appendNumber('4')" class="calc-btn">4</button>
+                    <button onclick="Calculator.appendNumber('5')" class="calc-btn">5</button>
+                    <button onclick="Calculator.appendNumber('6')" class="calc-btn">6</button>
+                    <button onclick="Calculator.appendOperator('+')" class="calc-btn operator">+</button>
+                    
+                    <button onclick="Calculator.appendNumber('1')" class="calc-btn">1</button>
+                    <button onclick="Calculator.appendNumber('2')" class="calc-btn">2</button>
+                    <button onclick="Calculator.appendNumber('3')" class="calc-btn">3</button>
+                    <button onclick="Calculator.calculate()" class="calc-btn equals" rowspan="2">=</button>
+                    
+                    <button onclick="Calculator.appendNumber('0')" class="calc-btn zero">0</button>
+                    <button onclick="Calculator.appendNumber('.')" class="calc-btn">.</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 단위 변환기 탭 -->
+        <div id="converter" class="tab">
+            <h2>단위 변환기</h2>
+            <div class="converter">
+                <div class="input-group">
+                    <label>
+                        카테고리
+                        <select id="convCategory">
+                            <option value="length">길이</option>
+                            <option value="mass">무게</option>
+                            <option value="temp">온도</option>
+                            <option value="area">면적</option>
+                            <option value="volume">부피</option>
+                            <option value="speed">속도</option>
+                            <option value="time">시간</option>
+                            <option value="data">데이터</option>
+                        </select>
+                    </label>
+                    <label>
+                        값
+                        <input type="number" id="convValue" value="1" step="any">
+                    </label>
+                    <label>
+                        From
+                        <select id="convFrom"></select>
+                    </label>
+                    <label>
+                        To
+                        <select id="convTo"></select>
+                    </label>
+                </div>
+                <div class="button-group">
+                    <button class="primary-btn" onclick="Converter.convert()">변환</button>
+                </div>
+                <div id="convResult" class="result-display"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/ui.js"></script>
+    <script src="js/numberDraw.js"></script>
+    <script src="js/stopwatch.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/converter.js"></script>
+    <script src="js/matrix.js"></script>
+</body>
+</html>
